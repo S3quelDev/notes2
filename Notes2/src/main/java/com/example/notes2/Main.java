@@ -9,19 +9,6 @@ import java.util.List;
 
 public class Main {
 
-    public void update(Notes note, Session session) {
-        session.update(note);
-        session.beginTransaction().commit();
-        System.out.println("Object updated");
-    }
-    public void remove(Notes note, Session session) {
-        session.remove(note);
-    }
-
-    public void save(Notes note, Session session) {
-        session.save(note);
-        session.getTransaction().commit();
-    }
     public static void main(String[] args) {
         Session session = CreateFactory.getFactory().openSession();
         session.getTransaction().begin();
@@ -34,32 +21,21 @@ public class Main {
         note2.setNote("New note 2");
         note2.setNumber(2);
 
-        session.save(note1);
-        session.save(note2);
+        Notes.save(note1, session);
+        Notes.save(note2, session);
 
 
         note1.setNote("Updated note.");
-        session.update(note1);
-        session.getTransaction().commit();
+        Notes.update(note1, session);
 
         Notes note3 = new Notes();
         note3.setNote("New note 3");
         note3.setNumber(3);
+        Notes.save(note3, session);
 
-        List<Notes> list = CreateFactory.loadAllData(Notes.class, session);
-
-        for (Notes note : list) {
-            System.out.println(note.getId() + " " + note.getNote() +  " " + note.getNumber());
-        }
-
-
-        session = CreateFactory.getFactory().openSession();
-        session.remove(note1);
-
-        list = CreateFactory.loadAllData(Notes.class, session);
-        for (Notes note : list) {
-            System.out.println(note.getId() + " " + note.getNote() +  " " + note.getNumber());
-        }
+        Notes.printAll(session);
+        Notes.remove(note1, session);
+        Notes.printAll(session);
 
 
         session.close();
