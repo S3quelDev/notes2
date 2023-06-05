@@ -11,8 +11,10 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import org.hibernate.Session;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table (name = "notes", schema = "notes", catalog = "postgres")
@@ -32,4 +34,25 @@ public class Notes implements Serializable {
     @Column (name = "number")
     private int number;
 
+    public static void update(Notes note, Session session) {
+        session.update(note);
+        session.beginTransaction().commit();
+        System.out.println("Object updated");
+    }
+    public static void remove(Notes note, Session session) {
+        session.remove(note);
+    }
+
+    public static void save(Notes note, Session session) {
+        session.save(note);
+        session.getTransaction().commit();
+    }
+
+    public static void printAll(Session session) {
+        List<Notes> list = CreateFactory.loadAllData(Notes.class, session);
+
+        for (Notes note : list) {
+            System.out.println(note.getId() + " " + note.getNote() +  " " + note.getNumber());
+        }
+    }
 }
