@@ -36,7 +36,6 @@ public class Notes implements Serializable {
 
     public static void update(Notes note, Session session) {
         session.update(note);
-        session.beginTransaction().commit();
         System.out.println("Object updated");
     }
     public static void remove(Notes note, Session session) {
@@ -54,5 +53,18 @@ public class Notes implements Serializable {
         for (Notes note : list) {
             System.out.println(note.getId() + " " + note.getNote() +  " " + note.getNumber());
         }
+    }
+
+    public static Notes createNote(String note, int number) {
+        Session session = CreateFactory.getFactory().openSession();
+        session.getTransaction().begin();
+
+        Notes note_obj = new Notes();
+        note_obj.setNote(note);
+        note_obj.setNumber(number);
+        session.save(note_obj);
+        session.getTransaction().commit();
+
+        return note_obj;
     }
 }

@@ -3,6 +3,7 @@ package com.example.notes2;
 
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,28 +14,20 @@ public class Main {
         Session session = CreateFactory.getFactory().openSession();
         session.getTransaction().begin();
 
-        Notes note1 = new Notes();
-        note1.setNote("New note 1");
-        note1.setNumber(0);
+        List<Notes> list_obj = new ArrayList<Notes>();
 
-        Notes note2 = new Notes();
-        note2.setNote("New note 2");
-        note2.setNumber(2);
+        list_obj.add(Notes.createNote("Note 1", 23));
 
-        Notes.save(note1, session);
-        Notes.save(note2, session);
+        list_obj.add(Notes.createNote("Note 2", 32));
 
 
-        note1.setNote("Updated note.");
-        Notes.update(note1, session);
+        list_obj.get(0).setNote("Updated note.");
+        Notes.update(list_obj.get(0), session);
 
-        Notes note3 = new Notes();
-        note3.setNote("New note 3");
-        note3.setNumber(3);
-        Notes.save(note3, session);
+        list_obj.add(Notes.createNote("Note 3", 245));
 
         Notes.printAll(session);
-        Notes.remove(note1, session);
+        Notes.remove(list_obj.get(0), session);
         Notes.printAll(session);
 
 
