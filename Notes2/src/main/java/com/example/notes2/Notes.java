@@ -47,12 +47,13 @@ public class Notes implements Serializable {
         session.getTransaction().commit();
     }
 
-    public static void printAll(Session session) {
+    public static String printAll(Session session) {
+        String s = "";
         List<Notes> list = CreateFactory.loadAllData(Notes.class, session);
 
-        for (Notes note : list) {
-            System.out.println(note.getId() + " " + note.getNote() +  " " + note.getNumber());
-        }
+        for (Notes note : list) s += note.getId() + " " + note.getNote() + " " + note.getNumber();
+
+        return s;
     }
 
     public static Notes createNote(String note, int number) {
